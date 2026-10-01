@@ -1,31 +1,19 @@
-﻿using PCVerwaltung.Classes;
+using PCVerwaltung.Classes;
 using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PCVerwaltung
 {
     /// <summary>
     /// Interaktionslogik für GehaeuseView.xaml
     /// </summary>
-
-
     public partial class GehaeuseView : UserControl
     {
-        // Optional: Event, damit der Host (HardwareWindow) das Ergebnis bekommt
         public event Action<Case>? Saved;
-
-
 
         public GehaeuseView()
         {
@@ -52,21 +40,33 @@ namespace PCVerwaltung
                 ok = false;
             }
 
+            if (!TryParsePrice(txtEkPreis.Text, out decimal ekPreis))
+            {
+                SetError(txtEkPreis, "Bitte einen gültigen EK-Preis eingeben (z. B. 85,00).");
+                ok = false;
+            }
+
+            if (!TryParsePrice(txtVkPreis.Text, out decimal vkPreis))
+            {
+                SetError(txtVkPreis, "Bitte einen gültigen VK-Preis eingeben (z. B. 119,90).");
+                ok = false;
+            }
 
             if (!ok) return;
 
-            var data = new Case(txtHersteller.Text.Trim(), txtModell.Text.Trim(), (Formfaktor)cmbFormfaktor.SelectedItem);
+            var data = new Case(
+                txtHersteller.Text.Trim(),
+                txtModell.Text.Trim(),
+                (Formfaktor)cmbFormfaktor.SelectedItem,
+                ekPreis,
+                vkPreis);
 
-
-            // Optional: an Host signalisieren
             Saved?.Invoke(data);
 
-            // Demo: Anzeige
             MessageBox.Show(
-                $"Gespeichert:\nHersteller: {data.Hersteller}\nModell: {data.Modell}\nFormfaktor: {data.Formfaktor}",
-                "Gehäuse", MessageBoxButton.OK, MessageBoxImage.Information);
+                $"Gehäuse erfolgreich gespeichert:\nHersteller: {data.Hersteller}\nModell: {data.Modell}\nFormfaktor: {data.Formfaktor}\nEK: {data.EkPreis:C} | VK: {data.VkPreis:C}",
+                "Gehäuse erfasst", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            // Felder zurücksetzen (optional)
             ResetFields();
         }
 
@@ -74,15 +74,25 @@ namespace PCVerwaltung
 
         private void ResetFields()
         {
-            txtHersteller.Text = "";
-            txtModell.Text = "";
+            txtHersteller.Text = string.Empty;
+            txtModell.Text = string.Empty;
+            txtEkPreis.Text = string.Empty;
+            txtVkPreis.Text = string.Empty;
             cmbFormfaktor.SelectedIndex = 0;
             ClearAllErrors();
         }
 
-        #region Simple-Validation-Helpers
+        private static bool TryParsePrice(string text, out decimal price)
+        {
+            price = 0;
+            if (string.IsNullOrWhiteSpace(text)) return false;
+            text = text.Trim().Replace("€", "").Trim();
+            return (decimal.TryParse(text, NumberStyles.Number, CultureInfo.CurrentCulture, out price) ||
+                    decimal.TryParse(text, NumberStyles.Number, CultureInfo.InvariantCulture, out price)) && price >= 0;
+        }
+
+        #region Validation Helpers
         private static readonly Brush ErrorBrush = new SolidColorBrush(Color.FromRgb(220, 20, 60)); // Crimson
-        private static readonly Brush NormalBrush = SystemColors.ControlDarkBrush;
 
         private void SetError(Control c, string msg)
         {
@@ -102,11 +112,9 @@ namespace PCVerwaltung
         {
             ClearError(txtHersteller);
             ClearError(txtModell);
-            ClearError(cmbFormfaktor);
+            ClearError(txtEkPreis);
+            ClearError(txtVkPreis);
         }
         #endregion
     }
-
-
-
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +23,24 @@ namespace PCVerwaltung.Classes
         Bar,
         Ratenzahlung,
         Leasing
+    }
+
+    public enum RamTyp
+    {
+        DDR4,
+        DDR5
+    }
+
+    public enum SsdTyp
+    {
+        NVMe,
+        SATA
+    }
+
+    public enum KundenRanking
+    {
+        PRIME,
+        STANDARD,
+        LOW
     }
 }
