@@ -58,11 +58,11 @@ namespace PCVerwaltung
 
         public static ObservableCollection<PC> PCs { get; } = new()
         {
-            new PC(Cases[0], CPUs[0], Mainboards[0]),
-            new PC(Cases[1], CPUs[1], Mainboards[1]),
-            new PC(Cases[2], CPUs[2], Mainboards[2]),
-            new PC(Cases[3], CPUs[3], Mainboards[4]),
-            new PC(Cases[4], CPUs[4], Mainboards[3]),
+            new PC("Gaming Beast AM5",        Cases[0], CPUs[0], Mainboards[0], Rams[1], SSDs[0]),
+            new PC("Office Compact Intel",    Cases[1], CPUs[3], Mainboards[1], Rams[0], SSDs[3]),
+            new PC("Mini-ITX Living Room",    Cases[2], CPUs[4], Mainboards[2], Rams[3], SSDs[2]),
+            new PC("Creator Workstation Pro", Cases[3], CPUs[1], Mainboards[4], Rams[4], SSDs[1]),
+            new PC("Streamer Edition AM5",    Cases[4], CPUs[2], Mainboards[3], Rams[2], SSDs[0]),
         };
 
         // Instanz-Properties für DataContext = App.Current Datenbindung in XAML
