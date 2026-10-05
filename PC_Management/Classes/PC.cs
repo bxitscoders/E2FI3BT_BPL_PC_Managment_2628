@@ -38,7 +38,7 @@ namespace PCVerwaltung.Classes
 
         public PC() { }
 
-        public PC(string name, Case @case, CPU cpu, Mainboard mainboard, Ram ram, SSD ssd)
+        public PC(string name, Case @case, CPU cpu, Mainboard mainboard, Ram ram, SSD ssd, string ipAdresse = "")
         {
             Name = name;
             Case = @case ?? throw new ArgumentNullException(nameof(@case));
@@ -46,15 +46,16 @@ namespace PCVerwaltung.Classes
             Mainboard = mainboard ?? throw new ArgumentNullException(nameof(mainboard));
             Ram = ram;
             Ssd = ssd;
+            IpAdresse = ipAdresse;
         }
 
         // Überladung für Rückwärtskompatibilität
         public PC(Case @case, CPU cpu, Mainboard mainboard)
-            : this("PC-System", @case, cpu, mainboard, null!, null!)
+            : this("PC-System", @case, cpu, mainboard, null!, null!, "")
         {
         }
 
         public override string ToString()
-            => $"{Name} | {Cpu?.Modell} | {Ram?.KapazitaetGB}GB RAM | {Ssd?.KapazitaetGB}GB SSD | {Mainboard?.Modell} | {Case?.Modell} | {GesamtVkPreis:0.00} €";
+            => $"{Name} [IP: {(string.IsNullOrWhiteSpace(IpAdresse) ? "Keine" : IpAdresse)}] | {Cpu?.Modell} | {Ram?.KapazitaetGB}GB RAM | {Ssd?.KapazitaetGB}GB SSD | {Mainboard?.Modell} | {Case?.Modell} | {GesamtVkPreis:0.00} €";
     }
 }
