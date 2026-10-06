@@ -8,6 +8,8 @@ namespace PCVerwaltung.Classes
         public int KapazitaetGB { get; set; } = 1000;
         public int LesegeschwindigkeitMBs { get; set; } = 7000;
 
+        public SSD() : base("", "") { }
+
         public SSD(string hersteller, string modell, SsdTyp typ, int kapazitaetGB, int lesegeschwindigkeitMBs, decimal ekPreis = 0.0m, decimal vkPreis = 0.0m)
             : base(hersteller, modell, ekPreis, vkPreis)
         {
