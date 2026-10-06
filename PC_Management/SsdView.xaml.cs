@@ -9,19 +9,17 @@ using System.Windows.Media;
 namespace PCVerwaltung
 {
     /// <summary>
-    /// Interaktionslogik für MainboardView.xaml
+    /// Interaktionslogik für SsdView.xaml
     /// </summary>
-    public partial class MainboardView : UserControl
+    public partial class SsdView : UserControl
     {
-        public event Action<Mainboard>? Saved;
+        public event Action<SSD>? Saved;
 
-        public MainboardView()
+        public SsdView()
         {
             InitializeComponent();
-            cmbFormfaktor.ItemsSource = Enum.GetValues(typeof(Formfaktor)).Cast<Formfaktor>();
-            cmbFormfaktor.SelectedItem = Formfaktor.ATX;
-            cmbSockel.ItemsSource = Enum.GetValues(typeof(SockelTyp)).Cast<SockelTyp>();
-            cmbSockel.SelectedItem = SockelTyp.AM5;
+            cmbTyp.ItemsSource = Enum.GetValues(typeof(SsdTyp)).Cast<SsdTyp>();
+            cmbTyp.SelectedItem = SsdTyp.NVMe;
         }
 
         private void OnSaveClick(object sender, RoutedEventArgs e)
@@ -42,40 +40,46 @@ namespace PCVerwaltung
                 ok = false;
             }
 
-            if (!int.TryParse(txtRamSlots.Text.Trim(), out int ramSlots) || ramSlots <= 0)
+            if (!int.TryParse(txtKapazitaet.Text.Trim(), out int kapazitaet) || kapazitaet <= 0)
             {
-                SetError(txtRamSlots, "Bitte eine gültige Anzahl an RAM-Steckplätzen angeben (z. B. 2 oder 4).");
+                SetError(txtKapazitaet, "Bitte eine gültige Kapazität in GB angeben (z. B. 500, 1000 oder 2000).");
+                ok = false;
+            }
+
+            if (!int.TryParse(txtLesen.Text.Trim(), out int lesen) || lesen <= 0)
+            {
+                SetError(txtLesen, "Bitte eine gültige Lesegeschwindigkeit in MB/s angeben (z. B. 7000).");
                 ok = false;
             }
 
             if (!TryParsePrice(txtEkPreis.Text, out decimal ekPreis))
             {
-                SetError(txtEkPreis, "Bitte einen gültigen EK-Preis eingeben (z. B. 140,00).");
+                SetError(txtEkPreis, "Bitte einen gültigen EK-Preis eingeben (z. B. 75,00).");
                 ok = false;
             }
 
             if (!TryParsePrice(txtVkPreis.Text, out decimal vkPreis))
             {
-                SetError(txtVkPreis, "Bitte einen gültigen VK-Preis eingeben (z. B. 189,90).");
+                SetError(txtVkPreis, "Bitte einen gültigen VK-Preis eingeben (z. B. 109,90).");
                 ok = false;
             }
 
             if (!ok) return;
 
-            var data = new Mainboard(
+            var data = new SSD(
                 txtHersteller.Text.Trim(),
                 txtModell.Text.Trim(),
-                (Formfaktor)cmbFormfaktor.SelectedItem,
-                (SockelTyp)cmbSockel.SelectedItem,
+                (SsdTyp)cmbTyp.SelectedItem,
+                kapazitaet,
+                lesen,
                 ekPreis,
-                vkPreis,
-                ramSlots);
+                vkPreis);
 
             Saved?.Invoke(data);
 
             MessageBox.Show(
-                $"Mainboard erfolgreich gespeichert:\nHersteller: {data.Hersteller}\nModell: {data.Modell}\nFormfaktor: {data.Formfaktor} | Sockel: {data.Sockel}\nRAM-Slots: {data.RamSlots}\nEK: {data.EkPreis:C} | VK: {data.VkPreis:C}",
-                "Mainboard erfasst", MessageBoxButton.OK, MessageBoxImage.Information);
+                $"SSD erfolgreich gespeichert:\nHersteller: {data.Hersteller}\nModell: {data.Modell}\nTyp: {data.Typ} | {data.KapazitaetGB} GB ({data.LesegeschwindigkeitMBs} MB/s)\nEK: {data.EkPreis:C} | VK: {data.VkPreis:C}",
+                "SSD erfasst", MessageBoxButton.OK, MessageBoxImage.Information);
 
             ResetFields();
         }
@@ -86,11 +90,11 @@ namespace PCVerwaltung
         {
             txtHersteller.Text = string.Empty;
             txtModell.Text = string.Empty;
-            txtRamSlots.Text = "4";
+            txtKapazitaet.Text = "1000";
+            txtLesen.Text = "7000";
             txtEkPreis.Text = string.Empty;
             txtVkPreis.Text = string.Empty;
-            cmbFormfaktor.SelectedIndex = 0;
-            cmbSockel.SelectedIndex = 0;
+            cmbTyp.SelectedIndex = 0;
             ClearAllErrors();
         }
 
@@ -124,7 +128,8 @@ namespace PCVerwaltung
         {
             ClearError(txtHersteller);
             ClearError(txtModell);
-            ClearError(txtRamSlots);
+            ClearError(txtKapazitaet);
+            ClearError(txtLesen);
             ClearError(txtEkPreis);
             ClearError(txtVkPreis);
         }

@@ -1,14 +1,63 @@
-﻿<UserControl x:Class="PCVerwaltung.CpuView"
+<UserControl x:Class="PCVerwaltung.CpuView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PCVerwaltung"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="16">
-        <TextBlock Text="CPU erfassen [ToDo]"
-                   FontSize="20" FontWeight="SemiBold"/>
-        <!-- TODO: Felder/Logik nach Bedarf -->
+             d:DesignHeight="550" d:DesignWidth="800">
+    <Grid Margin="16" MaxWidth="560">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.ColumnSpan="2" Text="CPU erfassen" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
+
+        <!-- Hersteller -->
+        <TextBlock Grid.Row="1" Text="Hersteller *:" VerticalAlignment="Center" Margin="0,6"/>
+        <TextBox x:Name="txtHersteller" Grid.Row="1" Grid.Column="1" Margin="0,4"/>
+
+        <!-- Modell -->
+        <TextBlock Grid.Row="2" Text="Modell *:" VerticalAlignment="Center" Margin="0,6"/>
+        <TextBox x:Name="txtModell" Grid.Row="2" Grid.Column="1" Margin="0,4"/>
+
+        <!-- Sockel -->
+        <TextBlock Grid.Row="3" Text="Sockel *:" VerticalAlignment="Center" Margin="0,6"/>
+        <ComboBox x:Name="cmbSockel" Grid.Row="3" Grid.Column="1" Margin="0,4" SelectedIndex="0"/>
+
+        <!-- Taktfrequenz -->
+        <TextBlock Grid.Row="4" Text="Taktfrequenz (GHz) *:" VerticalAlignment="Center" Margin="0,6"/>
+        <TextBox x:Name="txtTakt" Grid.Row="4" Grid.Column="1" Margin="0,4"/>
+
+        <!-- Kerne -->
+        <TextBlock Grid.Row="5" Text="Anzahl Kerne *:" VerticalAlignment="Center" Margin="0,6"/>
+        <TextBox x:Name="txtKerne" Grid.Row="5" Grid.Column="1" Margin="0,4" Text="8"/>
+
+        <!-- EK-Preis -->
+        <TextBlock Grid.Row="6" Text="EK-Preis (€) *:" VerticalAlignment="Center" Margin="0,6"/>
+        <TextBox x:Name="txtEkPreis" Grid.Row="6" Grid.Column="1" Margin="0,4"/>
+
+        <!-- VK-Preis -->
+        <TextBlock Grid.Row="7" Text="VK-Preis (€) *:" VerticalAlignment="Center" Margin="0,6"/>
+        <TextBox x:Name="txtVkPreis" Grid.Row="7" Grid.Column="1" Margin="0,4"/>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Orientation="Horizontal"
+                    HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Speichern" Width="110" Height="32" Margin="0,0,8,0" Click="OnSaveClick"/>
+            <Button Content="Abbrechen" Width="100" Height="32" Click="OnCancelClick"/>
+        </StackPanel>
     </Grid>
 </UserControl>

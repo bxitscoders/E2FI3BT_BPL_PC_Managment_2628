@@ -1,13 +1,14 @@
-﻿<UserControl x:Class="PCVerwaltung.AllListsView"
+<UserControl x:Class="PCVerwaltung.AllListsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="600" d:DesignWidth="900">
+             d:DesignHeight="600" d:DesignWidth="950">
     <UserControl.Resources>
         <Style x:Key="RightAlignStyle" TargetType="TextBlock">
             <Setter Property="TextAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
         </Style>
     </UserControl.Resources>
     <Grid Margin="16">
@@ -16,9 +17,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Alle Listen" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,8"/>
+        <TextBlock Text="Übersicht aller Hardware-Komponenten und Systeme" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,12"/>
 
-        <TabControl Grid.Row="1">
+        <TabControl x:Name="MainTabs" Grid.Row="1">
             <!-- Cases -->
             <TabItem Header="Gehäuse">
                 <DataGrid ItemsSource="{Binding Cases}"
@@ -26,9 +27,11 @@
                           CanUserAddRows="False" HeadersVisibility="Column"
                           EnableRowVirtualization="True" Margin="4">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Hersteller" Binding="{Binding Hersteller}" Width="*" />
-                        <DataGridTextColumn Header="Modell"     Binding="{Binding Modell}"     Width="2*" />
-                        <DataGridTextColumn Header="Formfaktor" Binding="{Binding Formfaktor}" Width="*" />
+                        <DataGridTextColumn Header="Hersteller"  Binding="{Binding Hersteller}" Width="160" />
+                        <DataGridTextColumn Header="Modell"      Binding="{Binding Modell}"     Width="220" />
+                        <DataGridTextColumn Header="Formfaktor"  Binding="{Binding Formfaktor}" Width="130" />
+                        <DataGridTextColumn Header="EK-Preis"    Binding="{Binding EkPreis, StringFormat={}{0:0.00} €}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="VK-Preis"    Binding="{Binding VkPreis, StringFormat={}{0:0.00} €}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
@@ -40,10 +43,13 @@
                           CanUserAddRows="False" HeadersVisibility="Column"
                           EnableRowVirtualization="True" Margin="4">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Hersteller" Binding="{Binding Hersteller}" Width="*" />
-                        <DataGridTextColumn Header="Modell"     Binding="{Binding Modell}"     Width="2*" />
-                        <DataGridTextColumn Header="Formfaktor" Binding="{Binding Formfaktor}" Width="*" />
-                        <DataGridTextColumn Header="Sockel"     Binding="{Binding Sockel}"     Width="*" />
+                        <DataGridTextColumn Header="Hersteller"  Binding="{Binding Hersteller}" Width="140" />
+                        <DataGridTextColumn Header="Modell"      Binding="{Binding Modell}"     Width="200" />
+                        <DataGridTextColumn Header="Formfaktor"  Binding="{Binding Formfaktor}" Width="110" />
+                        <DataGridTextColumn Header="Sockel"      Binding="{Binding Sockel}"     Width="110" />
+                        <DataGridTextColumn Header="RAM-Slots"   Binding="{Binding RamSlots}"   Width="90"  ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="EK-Preis"    Binding="{Binding EkPreis, StringFormat={}{0:0.00} €}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="VK-Preis"    Binding="{Binding VkPreis, StringFormat={}{0:0.00} €}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
@@ -55,33 +61,66 @@
                           CanUserAddRows="False" HeadersVisibility="Column"
                           EnableRowVirtualization="True" Margin="4">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Modell"       Binding="{Binding Modell}"        Width="2*" />
-
-                        <DataGridTextColumn Header="Takt (GHz)" Width="*"
-                            Binding="{Binding Taktfrequenz, StringFormat={}{0:0.##}}"
-                            ElementStyle="{StaticResource RightAlignStyle}"/>
-                        <!-- Falls deine CPU einen Sockel hat:
-                        <DataGridTextColumn Header="Sockel" Binding="{Binding Sockel}" Width="*"/>
-                        -->
+                        <DataGridTextColumn Header="Hersteller"  Binding="{Binding Hersteller}" Width="120" />
+                        <DataGridTextColumn Header="Modell"      Binding="{Binding Modell}"     Width="200" />
+                        <DataGridTextColumn Header="Sockel"      Binding="{Binding Sockel}"     Width="110" />
+                        <DataGridTextColumn Header="Takt (GHz)"  Binding="{Binding Taktfrequenz, StringFormat={}{0:0.##} GHz}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="Kerne"       Binding="{Binding Kerne}"      Width="80"  ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="EK-Preis"    Binding="{Binding EkPreis, StringFormat={}{0:0.00} €}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="VK-Preis"    Binding="{Binding VkPreis, StringFormat={}{0:0.00} €}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
 
-            <!-- PCs (zusammengesetzte Objekte) -->
+            <!-- RAM -->
+            <TabItem Header="RAM">
+                <DataGrid ItemsSource="{Binding Rams}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          CanUserAddRows="False" HeadersVisibility="Column"
+                          EnableRowVirtualization="True" Margin="4">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Hersteller"  Binding="{Binding Hersteller}" Width="140" />
+                        <DataGridTextColumn Header="Modell"      Binding="{Binding Modell}"     Width="190" />
+                        <DataGridTextColumn Header="Typ"         Binding="{Binding Typ}"        Width="100" />
+                        <DataGridTextColumn Header="Kapazität"   Binding="{Binding KapazitaetGB, StringFormat={}{0} GB}" Width="110" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="Takt (MHz)"  Binding="{Binding TaktfrequenzMHz, StringFormat={}{0} MHz}" Width="110" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="EK-Preis"    Binding="{Binding EkPreis, StringFormat={}{0:0.00} €}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="VK-Preis"    Binding="{Binding VkPreis, StringFormat={}{0:0.00} €}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <!-- SSDs -->
+            <TabItem Header="SSDs">
+                <DataGrid ItemsSource="{Binding SSDs}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          CanUserAddRows="False" HeadersVisibility="Column"
+                          EnableRowVirtualization="True" Margin="4">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Hersteller"  Binding="{Binding Hersteller}" Width="140" />
+                        <DataGridTextColumn Header="Modell"      Binding="{Binding Modell}"     Width="190" />
+                        <DataGridTextColumn Header="Typ"         Binding="{Binding Typ}"        Width="100" />
+                        <DataGridTextColumn Header="Kapazität"   Binding="{Binding KapazitaetGB, StringFormat={}{0} GB}" Width="110" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="Lesen (MB/s)" Binding="{Binding LesegeschwindigkeitMBs, StringFormat={}{0} MB/s}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="EK-Preis"    Binding="{Binding EkPreis, StringFormat={}{0:0.00} €}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="VK-Preis"    Binding="{Binding VkPreis, StringFormat={}{0:0.00} €}" Width="120" ElementStyle="{StaticResource RightAlignStyle}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <!-- PCs -->
             <TabItem Header="PCs">
                 <DataGrid ItemsSource="{Binding PCs}"
                           AutoGenerateColumns="False" IsReadOnly="True"
                           CanUserAddRows="False" HeadersVisibility="Column"
                           EnableRowVirtualization="True" Margin="4">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="CPU"          Binding="{Binding Cpu.Modell}"         Width="2*" />
-                        <DataGridTextColumn Header="Takt (GHz)" Width="*"
-    Binding="{Binding Cpu.Taktfrequenz, StringFormat={}{0:0.##}}"
-    ElementStyle="{StaticResource RightAlignStyle}"/>
-                        <DataGridTextColumn Header="Board"        Binding="{Binding Mainboard.Modell}"   Width="2*" />
-                        <DataGridTextColumn Header="Formfaktor"   Binding="{Binding Mainboard.Formfaktor}" Width="*" />
-                        <DataGridTextColumn Header="Sockel"       Binding="{Binding Mainboard.Sockel}"   Width="*" />
-                        <DataGridTextColumn Header="Gehäuse"      Binding="{Binding Case.Modell}"        Width="2*" />
+                        <DataGridTextColumn Header="CPU"          Binding="{Binding Cpu.Modell}"         Width="200" />
+                        <DataGridTextColumn Header="Takt"         Binding="{Binding Cpu.Taktfrequenz, StringFormat={}{0:0.##} GHz}" Width="100" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="Board"        Binding="{Binding Mainboard.Modell}"   Width="200" />
+                        <DataGridTextColumn Header="Formfaktor"   Binding="{Binding Mainboard.Formfaktor}" Width="110" />
+                        <DataGridTextColumn Header="Sockel"       Binding="{Binding Mainboard.Sockel}"   Width="100" />
+                        <DataGridTextColumn Header="Gehäuse"      Binding="{Binding Case.Modell}"        Width="180" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>

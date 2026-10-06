@@ -1,4 +1,4 @@
-<UserControl x:Class="PCVerwaltung.RamView"
+<UserControl x:Class="PCVerwaltung.SsdView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -23,7 +23,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.ColumnSpan="2" Text="RAM erfassen" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
+        <TextBlock Grid.ColumnSpan="2" Text="SSD / Speicher erfassen" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
 
         <!-- Hersteller -->
         <TextBlock Grid.Row="1" Text="Hersteller *:" VerticalAlignment="Center" Margin="0,6"/>
@@ -34,16 +34,16 @@
         <TextBox x:Name="txtModell" Grid.Row="2" Grid.Column="1" Margin="0,4"/>
 
         <!-- Typ -->
-        <TextBlock Grid.Row="3" Text="Speichertyp *:" VerticalAlignment="Center" Margin="0,6"/>
-        <ComboBox x:Name="cmbTyp" Grid.Row="3" Grid.Column="1" Margin="0,4" SelectedIndex="1"/>
+        <TextBlock Grid.Row="3" Text="Typ / Schnittstelle *:" VerticalAlignment="Center" Margin="0,6"/>
+        <ComboBox x:Name="cmbTyp" Grid.Row="3" Grid.Column="1" Margin="0,4" SelectedIndex="0"/>
 
         <!-- Kapazität -->
         <TextBlock Grid.Row="4" Text="Kapazität (GB) *:" VerticalAlignment="Center" Margin="0,6"/>
-        <TextBox x:Name="txtKapazitaet" Grid.Row="4" Grid.Column="1" Margin="0,4" Text="16"/>
+        <TextBox x:Name="txtKapazitaet" Grid.Row="4" Grid.Column="1" Margin="0,4" Text="1000"/>
 
-        <!-- Taktfrequenz -->
-        <TextBlock Grid.Row="5" Text="Taktfrequenz (MHz) *:" VerticalAlignment="Center" Margin="0,6"/>
-        <TextBox x:Name="txtTakt" Grid.Row="5" Grid.Column="1" Margin="0,4" Text="5600"/>
+        <!-- Lesegeschwindigkeit -->
+        <TextBlock Grid.Row="5" Text="Lesen (MB/s) *:" VerticalAlignment="Center" Margin="0,6"/>
+        <TextBox x:Name="txtLesen" Grid.Row="5" Grid.Column="1" Margin="0,4" Text="7000"/>
 
         <!-- EK-Preis -->
         <TextBlock Grid.Row="6" Text="EK-Preis (€) *:" VerticalAlignment="Center" Margin="0,6"/>
