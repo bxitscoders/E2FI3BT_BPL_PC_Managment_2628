@@ -23,3 +23,9 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+
+## SQLite Databases
+*.db
+*.db-shm
+*.db-wal
+

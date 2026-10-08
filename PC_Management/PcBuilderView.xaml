@@ -1,140 +1,299 @@
-﻿<UserControl x:Class="PCVerwaltung.PcBuilderView"
+<UserControl x:Class="PCVerwaltung.PcBuilderView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             >
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="780" d:DesignWidth="1120">
     <UserControl.Resources>
-        <!-- rechte Ausrichtung für Zahlen -->
         <Style x:Key="RightAlignStyle" TargetType="TextBlock">
             <Setter Property="TextAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="16" >
+    <Grid Margin="16">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- Titelbereich -->
         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-            <materialDesign:PackIcon Kind="DesktopTower" Width="24" Height="24" Margin="0,0,8,0"/>
-            <TextBlock Text="PC zusammenstellen" FontSize="20" FontWeight="SemiBold"
-                 VerticalAlignment="Center"/>
-            
+            <materialDesign:PackIcon Kind="DesktopTower" Width="28" Height="28" Margin="0,0,8,0" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+            <TextBlock Text="PC-System konfigurieren &amp; Netzwerk vorkonfigurieren (US-02 / US-03)" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center"/>
         </StackPanel>
-        <!-- Auswahlbereich -->
-        <Grid Grid.Row="1">
+
+        <!-- 1. Systemname & Netzwerk (IP-Vorkonfiguration) Eingabe -->
+        <materialDesign:Card Grid.Row="1" Margin="0,0,0,12" Padding="14">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Zeile 1: Systemname & Speichern-Button -->
+                <Grid Grid.Row="0" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
+                        <materialDesign:PackIcon Kind="RenameBox" Width="22" Height="22" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Systemname:" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBox x:Name="TxtSystemName" Grid.Column="1"
+                             materialDesign:HintAssist.Hint="Eindeutigen Systemnamen eingeben (z. B. Gaming PC Extreme, Office-Station 01)"
+                             FontSize="14" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                    <Button Grid.Column="2" Content="In PC-Liste speichern"
+                            Click="OnSaveClick" MinWidth="180" Height="36"/>
+                </Grid>
+
+                <Separator Grid.Row="0" VerticalAlignment="Bottom" Margin="0,0,0,-4" Background="#E0E0E0"/>
+
+                <!-- Zeile 2: IP-Adressvorkonfiguration (US-03 / UC 006) -->
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,14,0">
+                        <materialDesign:PackIcon Kind="IpNetwork" Width="20" Height="20" Margin="0,0,6,0" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                        <TextBlock Text="Netzwerkdaten:" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Router-IP -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
+                        <TextBlock Text="Router-IP:" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="Gray"/>
+                        <TextBox x:Name="TxtRouterIp" Text="192.168.1.1" MinWidth="110" TextAlignment="Center"
+                                 TextChanged="OnNetworkConfigChanged" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- PC-IP -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
+                        <TextBlock Text="PC-IP:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBox x:Name="TxtPcIp" MinWidth="110" FontWeight="SemiBold" TextAlignment="Center"
+                                 Foreground="{DynamicResource PrimaryHueMidBrush}" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Automatisch Hochzählen Checkbox -->
+                    <CheckBox x:Name="ChkAutoIp" Grid.Column="3" IsChecked="True" VerticalAlignment="Center"
+                              Checked="OnAutoIpChanged" Unchecked="OnAutoIpChanged" Margin="0,0,16,0"
+                              Content="Auto: 1. freie IP nach Router (hochzählen)"/>
+
+                    <TextBlock x:Name="TxtIpInfo" Grid.Column="4" Text="Nächste freie Adresse ermittelt" FontSize="11"
+                               Foreground="Green" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                </Grid>
+            </Grid>
+        </materialDesign:Card>
+
+        <!-- 2. Komponentenauswahl & Live-Kalkulation -->
+        <Grid Grid.Row="2" Margin="0,0,0,12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Case -->
-            <materialDesign:Card Margin="0,0,12,0" Padding="12">
+            <!-- 1. Gehäuse -->
+            <materialDesign:Card Grid.Row="0" Grid.Column="0" Margin="0,0,8,10" Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Auswahl Gehäuse:" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                    <ComboBox x:Name="CmbCase"
-                              ItemsSource="{Binding Cases}"
-                              SelectedIndex="0" MinWidth="240">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                        <materialDesign:PackIcon Kind="ServerSecurity" Width="18" Height="18" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="1. Gehäuse:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <ComboBox x:Name="CmbCase" ItemsSource="{Binding CasesList}"
+                              SelectedIndex="0" SelectionChanged="OnComponentSelectionChanged">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock>
-                                    <Run Text="{Binding Hersteller}"/>
+                                    <Run Text="{Binding Hersteller}" FontWeight="Medium"/>
                                     <Run Text=" "/>
                                     <Run Text="{Binding Modell}"/>
-                                    <Run Text=" ("/>
-                                    <Run Text="{Binding Formfaktor}"/>
-                                    <Run Text=")"/>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-            </materialDesign:Card>
-
-            <!-- Mainboard -->
-            <materialDesign:Card Grid.Column="1" Margin="0,0,12,0" Padding="12">
-                <StackPanel>
-                    <TextBlock Text="Auswahl Mainboard:" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                    <ComboBox x:Name="CmbMainboard"
-                              ItemsSource="{Binding Mainboards}"
-                              SelectedIndex="0" MinWidth="240">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock>
-                                    <Run Text="{Binding Hersteller}"/>
-                                    <Run Text=" "/>
-                                    <Run Text="{Binding Modell}"/>
-                                    <Run Text=" ("/>
-                                    <Run Text="{Binding Formfaktor}"/>
-                                    <Run Text=", "/>
-                                    <Run Text="{Binding Sockel}"/>
-                                    <Run Text=")"/>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-            </materialDesign:Card>
-
-            <!-- CPU -->
-            <materialDesign:Card Grid.Column="2" Padding="12">
-                <StackPanel>
-                    <TextBlock Text="Auswahl CPU:" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                    <ComboBox x:Name="CmbCpu"
-                              ItemsSource="{Binding CPUs}"
-                              SelectedIndex="0" MinWidth="240">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock>
-                                    <Run Text="{Binding Modell}"/>
-                                    <!-- Falls deine CPU eine Sockel-Eigenschaft hat, füge die Zeilen aus: -->
-                                    <!-- <Run Text=" ("/><Run Text="{Binding Sockel}"/><Run Text=")"/> -->
+                                    <Run Text=" ("/><Run Text="{Binding Formfaktor}"/><Run Text=")"/>
                                     <Run Text=" – "/>
-                                    <Run Text="{Binding Taktfrequenz, StringFormat={}{0:0.##} }"/>
-                                    <Run Text=" GHz"/>
+                                    <Run Text="{Binding VkPreis, StringFormat={}{0:0.00} €}"/>
                                 </TextBlock>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- 2. Mainboard -->
+            <materialDesign:Card Grid.Row="0" Grid.Column="1" Margin="4,0,4,10" Padding="12">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                        <materialDesign:PackIcon Kind="DeveloperBoard" Width="18" Height="18" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="2. Mainboard:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <ComboBox x:Name="CmbMainboard" ItemsSource="{Binding MainboardsList}"
+                              SelectedIndex="0" SelectionChanged="OnComponentSelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Run Text="{Binding Hersteller}" FontWeight="Medium"/>
+                                    <Run Text=" "/>
+                                    <Run Text="{Binding Modell}"/>
+                                    <Run Text=" ("/><Run Text="{Binding Sockel}"/><Run Text=", "/><Run Text="{Binding Formfaktor}"/><Run Text=")"/>
+                                    <Run Text=" – "/>
+                                    <Run Text="{Binding VkPreis, StringFormat={}{0:0.00} €}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- 3. CPU -->
+            <materialDesign:Card Grid.Row="0" Grid.Column="2" Margin="8,0,0,10" Padding="12">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                        <materialDesign:PackIcon Kind="Cpu64Bit" Width="18" Height="18" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="3. CPU (Prozessor):" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <ComboBox x:Name="CmbCpu" ItemsSource="{Binding CPUsList}"
+                              SelectedIndex="0" SelectionChanged="OnComponentSelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Run Text="{Binding Hersteller}" FontWeight="Medium"/>
+                                    <Run Text=" "/>
+                                    <Run Text="{Binding Modell}"/>
+                                    <Run Text=" ("/><Run Text="{Binding Sockel}"/><Run Text=", "/><Run Text="{Binding Taktfrequenz, StringFormat={}{0:0.##} GHz}"/><Run Text=")"/>
+                                    <Run Text=" – "/>
+                                    <Run Text="{Binding VkPreis, StringFormat={}{0:0.00} €}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- 4. RAM -->
+            <materialDesign:Card Grid.Row="1" Grid.Column="0" Margin="0,0,8,0" Padding="12">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                        <materialDesign:PackIcon Kind="Memory" Width="18" Height="18" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="4. RAM (Arbeitsspeicher):" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <ComboBox x:Name="CmbRam" ItemsSource="{Binding RamsList}"
+                              SelectedIndex="0" SelectionChanged="OnComponentSelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Run Text="{Binding Hersteller}" FontWeight="Medium"/>
+                                    <Run Text=" "/>
+                                    <Run Text="{Binding Modell}"/>
+                                    <Run Text=" ("/><Run Text="{Binding KapazitaetGB}"/><Run Text=" GB "/><Run Text="{Binding Typ}"/><Run Text=")"/>
+                                    <Run Text=" – "/>
+                                    <Run Text="{Binding VkPreis, StringFormat={}{0:0.00} €}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- 5. SSD -->
+            <materialDesign:Card Grid.Row="1" Grid.Column="1" Margin="4,0,4,0" Padding="12">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                        <materialDesign:PackIcon Kind="Harddisk" Width="18" Height="18" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="5. SSD (Massenspeicher):" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <ComboBox x:Name="CmbSsd" ItemsSource="{Binding SSDsList}"
+                              SelectedIndex="0" SelectionChanged="OnComponentSelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Run Text="{Binding Hersteller}" FontWeight="Medium"/>
+                                    <Run Text=" "/>
+                                    <Run Text="{Binding Modell}"/>
+                                    <Run Text=" ("/><Run Text="{Binding KapazitaetGB}"/><Run Text=" GB "/><Run Text="{Binding Typ}"/><Run Text=")"/>
+                                    <Run Text=" – "/>
+                                    <Run Text="{Binding VkPreis, StringFormat={}{0:0.00} €}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- 6. Live-Kalkulation & Kompatibilität -->
+            <materialDesign:Card Grid.Row="1" Grid.Column="2" Margin="8,0,0,0" Padding="12" Background="{DynamicResource MaterialDesignCardBackground}">
+                <StackPanel>
+                    <TextBlock Text="Live-Kalkulation &amp; Status:" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                    <Grid Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Gesamt-EK:" Foreground="Gray"/>
+                        <TextBlock x:Name="TxtLiveEk" Grid.Column="1" Text="0,00 €" FontWeight="Medium"/>
+                    </Grid>
+                    <Grid Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Gesamt-VK:" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="TxtLiveVk" Grid.Column="1" Text="0,00 €" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                    </Grid>
+                    <Grid Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Marge:" Foreground="Gray"/>
+                        <TextBlock x:Name="TxtLiveMarge" Grid.Column="1" Text="0,00 €" Foreground="Green" FontWeight="Medium"/>
+                    </Grid>
+                    <TextBlock x:Name="TxtStatus" Text="✅ Kompatibel" FontSize="11" Margin="0,4,0,0" TextWrapping="Wrap"/>
                 </StackPanel>
             </materialDesign:Card>
         </Grid>
 
-        <!-- Aktionen + Ergebnisliste -->
-        <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,12,0,0">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,8">
-                <Button Content="In PC-Liste speichern"
-                        
-                        Width="180" Click="OnSaveClick"/>
-            </StackPanel>
+        <!-- 3. PC-Gesamtübersicht (DataGrid) -->
+        <materialDesign:Card Grid.Row="3" Padding="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <materialDesign:PackIcon Kind="FormatListBulleted" Width="20" Height="20" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Gesamtübersicht aller konfigurierten PC-Systeme:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                </StackPanel>
 
-            <!-- PC-Liste -->
-            <materialDesign:Card Padding="8">
-            <DataGrid ItemsSource="{Binding PCs}"
-                      Name="dgPCs"
-                      
-                      AutoGenerateColumns="False" IsReadOnly="True"
-                      CanUserAddRows="False" HeadersVisibility="Column"
-                      EnableRowVirtualization="True" Margin="0,4,0,0">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="CPU"        Binding="{Binding Cpu.Modell}"       Width="2*"/>
-                    <DataGridTextColumn Header="Takt (GHz)" Width="*"
-                        ElementStyle="{StaticResource RightAlignStyle}">
-                        <DataGridTextColumn.Binding>
-                            <Binding Path="Cpu.Taktfrequenz" StringFormat="0.##"/>
-                        </DataGridTextColumn.Binding>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Mainboard"  Binding="{Binding Mainboard.Modell}" Width="2*"/>
-                    <DataGridTextColumn Header="Formfaktor" Binding="{Binding Mainboard.Formfaktor}" Width="*"/>
-                    <DataGridTextColumn Header="Sockel"     Binding="{Binding Mainboard.Sockel}" Width="*"/>
-                    <DataGridTextColumn Header="Gehäuse"    Binding="{Binding Case.Modell}"      Width="2*"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            </materialDesign:Card>
-        </StackPanel>
+                <DataGrid x:Name="dgPCs" Grid.Row="1" ItemsSource="{Binding PCsList}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          CanUserAddRows="False" HeadersVisibility="Column"
+                          EnableRowVirtualization="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Systemname" Binding="{Binding Name}"             Width="120" FontWeight="Medium"/>
+                        <DataGridTextColumn Header="IP-Adresse" Binding="{Binding IpAdresse}"        Width="95"/>
+                        <DataGridTextColumn Header="CPU"        Binding="{Binding CpuSummary}"       Width="150"/>
+                        <DataGridTextColumn Header="RAM"        Binding="{Binding RamSummary}"       Width="130"/>
+                        <DataGridTextColumn Header="SSD"        Binding="{Binding SsdSummary}"       Width="130"/>
+                        <DataGridTextColumn Header="Mainboard"  Binding="{Binding MainboardSummary}" Width="140"/>
+                        <DataGridTextColumn Header="Gehäuse"    Binding="{Binding CaseSummary}"      Width="120"/>
+                        <DataGridTextColumn Header="Gesamt-EK"  Binding="{Binding GesamtEkPreis, StringFormat={}{0:0.00} €}" Width="85" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="Gesamt-VK"  Binding="{Binding GesamtVkPreis, StringFormat={}{0:0.00} €}" Width="85" ElementStyle="{StaticResource RightAlignStyle}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
     </Grid>
 </UserControl>
-

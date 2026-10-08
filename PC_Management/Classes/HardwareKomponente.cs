@@ -8,11 +8,13 @@ namespace PCVerwaltung.Classes
     /// </summary>
     public abstract class HardwareKomponente
     {
-        public Guid Id { get; } = Guid.NewGuid();
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Hersteller { get; set; } = string.Empty;
         public string Modell { get; set; } = string.Empty;
         public decimal EkPreis { get; set; } = 0.0m;
         public decimal VkPreis { get; set; } = 0.0m;
+
+        protected HardwareKomponente() { }
 
         protected HardwareKomponente(string hersteller, string modell, decimal ekPreis = 0.0m, decimal vkPreis = 0.0m)
         {
