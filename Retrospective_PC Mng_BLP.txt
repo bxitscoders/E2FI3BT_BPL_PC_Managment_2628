@@ -1,0 +1,9 @@
+> Was lief nicht gut:
+	- Projektvorbereitung
+> Was lief gut:
+	- Klare Arbeitsanweisung, Vorgefertigte Workflows
+> Aktuelles Sprintziel:
+	- Issues und Datenbankpersistenz fertigstellen
+> Nächstes Sprintziel:
+	- Nächsten Issues fertigstellen und zusätzliche Features einbauen, gründliche Planung
+	  der Erweiterungen, Reviews zur Klarstellung von unbekannten Funktionsbausteinen, 
