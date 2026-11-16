@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="750" d:DesignWidth="1100">
+             d:DesignHeight="780" d:DesignWidth="1120">
     <UserControl.Resources>
         <Style x:Key="RightAlignStyle" TargetType="TextBlock">
             <Setter Property="TextAlignment" Value="Right"/>
@@ -24,26 +24,74 @@
         <!-- Titelbereich -->
         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
             <materialDesign:PackIcon Kind="DesktopTower" Width="28" Height="28" Margin="0,0,8,0" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
-            <TextBlock Text="PC-System konfigurieren (US-02)" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            <TextBlock Text="PC-System konfigurieren &amp; Netzwerk vorkonfigurieren (US-02 / US-03)" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center"/>
         </StackPanel>
 
-        <!-- 1. Systemname Eingabe -->
+        <!-- 1. Systemname & Netzwerk (IP-Vorkonfiguration) Eingabe -->
         <materialDesign:Card Grid.Row="1" Margin="0,0,0,12" Padding="14">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
-                    <materialDesign:PackIcon Kind="RenameBox" Width="22" Height="22" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="Systemname:" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center"/>
-                </StackPanel>
-                <TextBox x:Name="TxtSystemName" Grid.Column="1"
-                         materialDesign:HintAssist.Hint="Eindeutigen Systemnamen eingeben (z. B. Gaming PC Extreme, Office-Station 01)"
-                         FontSize="14" VerticalAlignment="Center" Margin="0,0,16,0"/>
-                <Button Grid.Column="2" Content="In PC-Liste speichern"
-                        Click="OnSaveClick" MinWidth="180" Height="36"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Zeile 1: Systemname & Speichern-Button -->
+                <Grid Grid.Row="0" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
+                        <materialDesign:PackIcon Kind="RenameBox" Width="22" Height="22" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Systemname:" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBox x:Name="TxtSystemName" Grid.Column="1"
+                             materialDesign:HintAssist.Hint="Eindeutigen Systemnamen eingeben (z. B. Gaming PC Extreme, Office-Station 01)"
+                             FontSize="14" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                    <Button Grid.Column="2" Content="In PC-Liste speichern"
+                            Click="OnSaveClick" MinWidth="180" Height="36"/>
+                </Grid>
+
+                <Separator Grid.Row="0" VerticalAlignment="Bottom" Margin="0,0,0,-4" Background="#E0E0E0"/>
+
+                <!-- Zeile 2: IP-Adressvorkonfiguration (US-03 / UC 006) -->
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,14,0">
+                        <materialDesign:PackIcon Kind="IpNetwork" Width="20" Height="20" Margin="0,0,6,0" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                        <TextBlock Text="Netzwerkdaten:" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Router-IP -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
+                        <TextBlock Text="Router-IP:" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="Gray"/>
+                        <TextBox x:Name="TxtRouterIp" Text="192.168.1.1" MinWidth="110" TextAlignment="Center"
+                                 TextChanged="OnNetworkConfigChanged" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- PC-IP -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
+                        <TextBlock Text="PC-IP:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBox x:Name="TxtPcIp" MinWidth="110" FontWeight="SemiBold" TextAlignment="Center"
+                                 Foreground="{DynamicResource PrimaryHueMidBrush}" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Automatisch Hochzählen Checkbox -->
+                    <CheckBox x:Name="ChkAutoIp" Grid.Column="3" IsChecked="True" VerticalAlignment="Center"
+                              Checked="OnAutoIpChanged" Unchecked="OnAutoIpChanged" Margin="0,0,16,0"
+                              Content="Auto: 1. freie IP nach Router (hochzählen)"/>
+
+                    <TextBlock x:Name="TxtIpInfo" Grid.Column="4" Text="Nächste freie Adresse ermittelt" FontSize="11"
+                               Foreground="Green" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                </Grid>
             </Grid>
         </materialDesign:Card>
 
@@ -234,14 +282,15 @@
                           CanUserAddRows="False" HeadersVisibility="Column"
                           EnableRowVirtualization="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Systemname" Binding="{Binding Name}"             Width="135" FontWeight="Medium"/>
-                        <DataGridTextColumn Header="CPU"        Binding="{Binding CpuSummary}"       Width="165"/>
-                        <DataGridTextColumn Header="RAM"        Binding="{Binding RamSummary}"       Width="145"/>
-                        <DataGridTextColumn Header="SSD"        Binding="{Binding SsdSummary}"       Width="145"/>
-                        <DataGridTextColumn Header="Mainboard"  Binding="{Binding MainboardSummary}" Width="160"/>
-                        <DataGridTextColumn Header="Gehäuse"    Binding="{Binding CaseSummary}"      Width="135"/>
-                        <DataGridTextColumn Header="Gesamt-EK"  Binding="{Binding GesamtEkPreis, StringFormat={}{0:0.00} €}" Width="90" ElementStyle="{StaticResource RightAlignStyle}"/>
-                        <DataGridTextColumn Header="Gesamt-VK"  Binding="{Binding GesamtVkPreis, StringFormat={}{0:0.00} €}" Width="95" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="Systemname" Binding="{Binding Name}"             Width="120" FontWeight="Medium"/>
+                        <DataGridTextColumn Header="IP-Adresse" Binding="{Binding IpAdresse}"        Width="95"/>
+                        <DataGridTextColumn Header="CPU"        Binding="{Binding CpuSummary}"       Width="150"/>
+                        <DataGridTextColumn Header="RAM"        Binding="{Binding RamSummary}"       Width="130"/>
+                        <DataGridTextColumn Header="SSD"        Binding="{Binding SsdSummary}"       Width="130"/>
+                        <DataGridTextColumn Header="Mainboard"  Binding="{Binding MainboardSummary}" Width="140"/>
+                        <DataGridTextColumn Header="Gehäuse"    Binding="{Binding CaseSummary}"      Width="120"/>
+                        <DataGridTextColumn Header="Gesamt-EK"  Binding="{Binding GesamtEkPreis, StringFormat={}{0:0.00} €}" Width="85" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="Gesamt-VK"  Binding="{Binding GesamtVkPreis, StringFormat={}{0:0.00} €}" Width="85" ElementStyle="{StaticResource RightAlignStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

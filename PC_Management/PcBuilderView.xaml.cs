@@ -13,7 +13,13 @@ namespace PCVerwaltung
         {
             InitializeComponent();
             DataContext = (App)Application.Current;
-            Loaded += (s, e) => UpdateLiveCalculation();
+            UpdateLiveCalculation();
+            UpdateCalculatedIp();
+            Loaded += (s, e) =>
+            {
+                UpdateLiveCalculation();
+                UpdateCalculatedIp();
+            };
         }
 
         private void OnComponentSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -21,9 +27,51 @@ namespace PCVerwaltung
             UpdateLiveCalculation();
         }
 
+        private void OnNetworkConfigChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateCalculatedIp();
+        }
+
+        private void OnAutoIpChanged(object sender, RoutedEventArgs e)
+        {
+            if (TxtPcIp == null || ChkAutoIp == null)
+                return;
+
+            bool isAuto = ChkAutoIp.IsChecked == true;
+            TxtPcIp.IsReadOnly = isAuto;
+
+            if (isAuto)
+            {
+                UpdateCalculatedIp();
+            }
+        }
+
+        private void UpdateCalculatedIp()
+        {
+            if (TxtPcIp == null || TxtRouterIp == null || TxtIpInfo == null || ChkAutoIp == null)
+                return;
+
+            if (ChkAutoIp.IsChecked != true)
+                return;
+
+            string routerIp = TxtRouterIp.Text?.Trim() ?? string.Empty;
+
+            if (NetworkConfig.IsValidIpv4(routerIp))
+            {
+                string nextIp = NetworkConfig.GetNextAvailableIp(routerIp, App.PCs);
+                TxtPcIp.Text = nextIp;
+                TxtIpInfo.Text = $"Automatisch: Erste freie IP nach Router ({routerIp})";
+                TxtIpInfo.Foreground = Brushes.Green;
+            }
+            else
+            {
+                TxtIpInfo.Text = "Ungültige Router-IP (Format: z. B. 192.168.1.1)";
+                TxtIpInfo.Foreground = Brushes.Red;
+            }
+        }
+
         private void UpdateLiveCalculation()
         {
-            // Null-Check vor Initialisierung aller UI-Elemente
             if (TxtLiveEk == null || TxtLiveVk == null || TxtLiveMarge == null || TxtStatus == null)
                 return;
 
@@ -118,7 +166,38 @@ namespace PCVerwaltung
                 return;
             }
 
-            // 3. Validierung: Alle 5 Komponenten ausgewählt
+            // 3. Validierung: Netzwerk / IP-Adresse (US-03)
+            string routerIp = TxtRouterIp.Text?.Trim() ?? string.Empty;
+            string pcIp = TxtPcIp.Text?.Trim() ?? string.Empty;
+
+            if (!NetworkConfig.IsValidIpv4(pcIp))
+            {
+                MessageBox.Show($"Bitte geben Sie eine gültige IPv4-Adresse für das PC-System ein (z. B. 192.168.1.7).",
+                                "Ungültige IP-Adresse",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
+                TxtPcIp.Focus();
+                return;
+            }
+
+            if (pcIp.Equals(routerIp, StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show($"Die IP-Adresse des PCs ({pcIp}) darf nicht mit der Router-IP ({routerIp}) identisch sein.",
+                                "IP-Konflikt mit Router",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
+                TxtPcIp.Focus();
+                return;
+            }
+
+            if (App.PCs.Any(p => p.IpAdresse.Equals(pcIp, StringComparison.OrdinalIgnoreCase)))
+            {
+                MessageBox.Show($"Die IP-Adresse '{pcIp}' ist bereits an ein anderes konfiguriertes PC-System vergeben.\nBitte wählen Sie eine freie IP-Adresse.",
+                                "IP-Adresse bereits belegt",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
+                TxtPcIp.Focus();
+                return;
+            }
+
+            // 4. Validierung: Alle 5 Komponenten ausgewählt
             var selCase = CmbCase.SelectedItem as Case;
             var selMb = CmbMainboard.SelectedItem as Mainboard;
             var selCpu = CmbCpu.SelectedItem as CPU;
@@ -133,7 +212,7 @@ namespace PCVerwaltung
                 return;
             }
 
-            // 4. Kompatibilitätsprüfung
+            // 5. Kompatibilitätsprüfung
             string? incompatibility = GetIncompatibilityReason(selCase, selMb, selCpu);
             if (incompatibility != null)
             {
@@ -147,13 +226,16 @@ namespace PCVerwaltung
                     return;
             }
 
-            // 5. System erstellen & speichern
-            var pc = new PC(systemName, selCase, selCpu, selMb, selRam, selSsd);
+            // 6. System mit vorkonfigurierter IP erstellen & speichern
+            var pc = new PC(systemName, selCase, selCpu, selMb, selRam, selSsd, pcIp);
             App.PCs.Add(pc);
 
-            // 6. Formular zurücksetzen & Erfolgsmeldung
+            // 7. Formular für den nächsten PC vorbereiten
             TxtSystemName.Clear();
+            UpdateCalculatedIp(); // Zählt für den nächsten PC automatisch hoch!
+
             MessageBox.Show($"Das PC-System '{pc.Name}' wurde erfolgreich gespeichert!\n\n" +
+                            $"• IP-Adresse: {pc.IpAdresse}\n" +
                             $"• CPU: {selCpu.Hersteller} {selCpu.Modell}\n" +
                             $"• RAM: {selRam.KapazitaetGB} GB ({selRam.Typ})\n" +
                             $"• SSD: {selSsd.KapazitaetGB} GB ({selSsd.Typ})\n" +
