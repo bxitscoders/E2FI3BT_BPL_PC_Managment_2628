@@ -115,12 +115,14 @@
                           CanUserAddRows="False" HeadersVisibility="Column"
                           EnableRowVirtualization="True" Margin="4">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="CPU"          Binding="{Binding Cpu.Modell}"         Width="200" />
-                        <DataGridTextColumn Header="Takt"         Binding="{Binding Cpu.Taktfrequenz, StringFormat={}{0:0.##} GHz}" Width="100" ElementStyle="{StaticResource RightAlignStyle}"/>
-                        <DataGridTextColumn Header="Board"        Binding="{Binding Mainboard.Modell}"   Width="200" />
-                        <DataGridTextColumn Header="Formfaktor"   Binding="{Binding Mainboard.Formfaktor}" Width="110" />
-                        <DataGridTextColumn Header="Sockel"       Binding="{Binding Mainboard.Sockel}"   Width="100" />
-                        <DataGridTextColumn Header="Gehäuse"      Binding="{Binding Case.Modell}"        Width="180" />
+                        <DataGridTextColumn Header="Systemname" Binding="{Binding Name}"             Width="135" FontWeight="Medium"/>
+                        <DataGridTextColumn Header="CPU"        Binding="{Binding CpuSummary}"       Width="165"/>
+                        <DataGridTextColumn Header="RAM"        Binding="{Binding RamSummary}"       Width="145"/>
+                        <DataGridTextColumn Header="SSD"        Binding="{Binding SsdSummary}"       Width="145"/>
+                        <DataGridTextColumn Header="Mainboard"  Binding="{Binding MainboardSummary}" Width="160"/>
+                        <DataGridTextColumn Header="Gehäuse"    Binding="{Binding CaseSummary}"      Width="135"/>
+                        <DataGridTextColumn Header="Gesamt-EK"  Binding="{Binding GesamtEkPreis, StringFormat={}{0:0.00} €}" Width="90" ElementStyle="{StaticResource RightAlignStyle}"/>
+                        <DataGridTextColumn Header="Gesamt-VK"  Binding="{Binding GesamtVkPreis, StringFormat={}{0:0.00} €}" Width="95" ElementStyle="{StaticResource RightAlignStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
