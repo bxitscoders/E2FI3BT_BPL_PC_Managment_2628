@@ -8,6 +8,8 @@ namespace PCVerwaltung.Classes
         public int KapazitaetGB { get; set; } = 16;
         public int TaktfrequenzMHz { get; set; } = 5600;
 
+        public Ram() : base("", "") { }
+
         public Ram(string hersteller, string modell, RamTyp typ, int kapazitaetGB, int taktfrequenzMHz, decimal ekPreis = 0.0m, decimal vkPreis = 0.0m)
             : base(hersteller, modell, ekPreis, vkPreis)
         {

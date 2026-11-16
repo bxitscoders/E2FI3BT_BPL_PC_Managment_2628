@@ -28,7 +28,7 @@ Entwickelt mit **.NET 8 (C#)**, **WPF (XAML)** und **Entity Framework Core (SQLi
 - **Logische Vergabe:** Das erste System erhält die erste freie Host-Adresse nach dem Router (z. B. `.2`).
 - **Fortlaufende Inkrementierung:** Folgesysteme erhalten automatisch aufsteigende IP-Adressen innerhalb des Subnetzes.
 
-### 4. 💾 Persistente Datenspeicherung (SQLite & EF Core)
+### 4. 💾 Persistente Datenspeicherung (SQLite & EF Core) ([Issue #12](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/issues/12))
 - **Relationale Datenbank:** Speicherung sämtlicher Hardwarekomponenten und PC-Konfigurationen in einer lokalen SQLite-Datenbank (`Data/pc_management.db`).
 - **Entity Framework Core:** Automatisches Schema-Management und Initialisierung beim Programmstart.
 - **Sitzungsübergreifend:** Komponenten und konfigurierte PCs bleiben nach Schließen der Anwendung vollständig erhalten.
@@ -99,10 +99,10 @@ dotnet run
 | Branch | Status | Beschreibung |
 |---|:---:|---|
 | `main` | 🟢 Stabil | Bereinigte Ausgangsbasis mit `.gitignore`, vollständigen Klassen und Ressourcen. |
-| [`feature/US-01-hardware-verwaltung`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-01-hardware-verwaltung) | ✅ Fertig ([PR #8](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/8)) | Erfassungsmasken & OOP-Modell für alle Hardwarekomponenten. |
-| [`feature/US-02-pc-konfiguration`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-02-pc-konfiguration) | ✅ Fertig | PC-Konfigurator mit Kompatibilitätsprüfung & Margenberechnung. |
-| [`feature/US-03-ip-adress-verwaltung`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-03-ip-adress-verwaltung) | ✅ Fertig | Automatische IP-Adress-Zuweisung für konfigurierte Systeme. |
-| [`feature/sqlite-datenbank-persistenz`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/sqlite-datenbank-persistenz) | ✅ Fertig | Vollständige SQLite-Persistenz mit EF Core. |
+| [`feature/US-01-hardware-verwaltung`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-01-hardware-verwaltung) | ✅ Gemergt ([PR #8](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/8)) | Erfassungsmasken & OOP-Modell für alle Hardwarekomponenten. |
+| [`feature/US-02-pc-konfiguration`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-02-pc-konfiguration) | ✅ Gemergt ([PR #9](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/9)) | PC-Konfigurator mit Kompatibilitätsprüfung & Margenberechnung. |
+| [`feature/US-03-ip-adress-verwaltung`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-03-ip-adress-verwaltung) | ✅ Gemergt ([PR #10](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/10)) | Automatische IP-Adress-Zuweisung für konfigurierte Systeme. |
+| [`feature/sqlite-datenbank-persistenz`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/sqlite-datenbank-persistenz) | ✅ Gemergt ([PR #11](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/11)) | Vollständige SQLite-Persistenz mit EF Core & VS Solution. |
 
 ---
 

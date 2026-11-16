@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using PCVerwaltung.Classes;
+using PCVerwaltung.Data;
 
 namespace PCVerwaltung
 {
@@ -226,8 +227,9 @@ namespace PCVerwaltung
                     return;
             }
 
-            // 6. System mit vorkonfigurierter IP erstellen & speichern
+            // 6. System mit vorkonfigurierter IP erstellen & in SQLite sowie App.PCs speichern
             var pc = new PC(systemName, selCase, selCpu, selMb, selRam, selSsd, pcIp);
+            DatabaseService.SavePc(pc);
             App.PCs.Add(pc);
 
             // 7. Formular für den nächsten PC vorbereiten

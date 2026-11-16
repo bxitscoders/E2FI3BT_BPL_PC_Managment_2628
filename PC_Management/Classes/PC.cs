@@ -4,6 +4,7 @@ namespace PCVerwaltung.Classes
 {
     public class PC
     {
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = string.Empty;
         public Case? Case { get; set; }
         public CPU? Cpu { get; set; }
