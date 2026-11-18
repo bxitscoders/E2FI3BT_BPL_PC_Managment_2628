@@ -110,7 +110,7 @@ dotnet run
 | [`feature/US-02-pc-konfiguration`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-02-pc-konfiguration) | ✅ Gemergt ([PR #9](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/9)) | PC-Konfigurator mit Kompatibilitätsprüfung & Margenberechnung. |
 | [`feature/US-03-ip-adress-verwaltung`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-03-ip-adress-verwaltung) | ✅ Gemergt ([PR #10](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/10)) | Automatische IP-Adress-Zuweisung für konfigurierte Systeme. |
 | [`feature/sqlite-datenbank-persistenz`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/sqlite-datenbank-persistenz) | ✅ Gemergt ([PR #11](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/11)) | Vollständige SQLite-Persistenz mit EF Core & VS Solution. |
-| [`feature/US-04-kundenverwaltung`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-04-kundenverwaltung) | ✅ Fertig | Kundenstammdaten (CRUD), Bonitätsranking & SQLite-Persistenz. |
+| [`feature/US-04-kundenverwaltung`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-04-kundenverwaltung) | ✅ Gemergt ([PR #13](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/13)) | Kundenstammdaten (CRUD), Bonitätsranking & SQLite-Persistenz. |
 
 ---
 
