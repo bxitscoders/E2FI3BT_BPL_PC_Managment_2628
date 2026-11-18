@@ -127,6 +127,23 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
+
+            <!-- Kunden -->
+            <TabItem Header="Kunden">
+                <DataGrid ItemsSource="{Binding Kunden}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          CanUserAddRows="False" HeadersVisibility="Column"
+                          EnableRowVirtualization="True" Margin="4">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name"        Binding="{Binding FullName}"           Width="170" FontWeight="Medium"/>
+                        <DataGridTextColumn Header="Ranking"     Binding="{Binding Ranking}"            Width="105" FontWeight="SemiBold"/>
+                        <DataGridTextColumn Header="Konditionen" Binding="{Binding KonditionenSummary}" Width="245"/>
+                        <DataGridTextColumn Header="Anschrift"   Binding="{Binding Adresse}"            Width="240"/>
+                        <DataGridTextColumn Header="E-Mail"      Binding="{Binding Email}"              Width="190"/>
+                        <DataGridTextColumn Header="Telefon"     Binding="{Binding Telefon}"            Width="140"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

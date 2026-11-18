@@ -16,6 +16,7 @@ namespace PCVerwaltung
         public static ObservableCollection<Ram> Rams { get; } = new();
         public static ObservableCollection<SSD> SSDs { get; } = new();
         public static ObservableCollection<PC> PCs { get; } = new();
+        public static ObservableCollection<Kunde> Kunden { get; } = new();
 
         public App()
         {
@@ -49,6 +50,9 @@ namespace PCVerwaltung
 
             PCs.Clear();
             foreach (var item in DatabaseService.LoadPcs()) PCs.Add(item);
+
+            Kunden.Clear();
+            foreach (var item in DatabaseService.LoadKunden()) Kunden.Add(item);
         }
 
         // Instanz-Properties für DataContext = App.Current Datenbindung in XAML
@@ -58,5 +62,6 @@ namespace PCVerwaltung
         public ObservableCollection<Ram> RamsList => Rams;
         public ObservableCollection<SSD> SSDsList => SSDs;
         public ObservableCollection<PC> PCsList => PCs;
+        public ObservableCollection<Kunde> KundenList => Kunden;
     }
 }

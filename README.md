@@ -28,10 +28,15 @@ Entwickelt mit **.NET 8 (C#)**, **WPF (XAML)** und **Entity Framework Core (SQLi
 - **Logische Vergabe:** Das erste System erhält die erste freie Host-Adresse nach dem Router (z. B. `.2`).
 - **Fortlaufende Inkrementierung:** Folgesysteme erhalten automatisch aufsteigende IP-Adressen innerhalb des Subnetzes.
 
-### 4. 💾 Persistente Datenspeicherung (SQLite & EF Core) ([Issue #12](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/issues/12))
-- **Relationale Datenbank:** Speicherung sämtlicher Hardwarekomponenten und PC-Konfigurationen in einer lokalen SQLite-Datenbank (`Data/pc_management.db`).
+### 4. 👥 Kundenstammdaten & Bonitätsranking ([Issue #4](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/issues/4))
+- **Vollständige CRUD-Verwaltung:** Kunden über `KundenView` neu anlegen, per Klick aus der Tabelle laden/bearbeiten und mit Sicherheitsabfrage löschen.
+- **Bonitätsranking (`KundenRanking`):** Einstufung in `PRIME` (14 % Bar-Rabatt, Finanzierung möglich), `STANDARD` (5 % Bar-Rabatt, Finanzierung möglich) oder `LOW` (0 % Rabatt, nur Barzahlung).
+- **Eingabevalidierung:** Automatische Prüfung von Pflichtfeldern, Anschrift, E-Mail-Format (inkl. Duplikatsprüfung) und Telefonnummer.
+
+### 5. 💾 Persistente Datenspeicherung (SQLite & EF Core) ([Issue #12](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/issues/12))
+- **Relationale Datenbank:** Speicherung sämtlicher Hardwarekomponenten, PC-Konfigurationen und Kundenstammdaten in einer lokalen SQLite-Datenbank (`pcverwaltung.db`).
 - **Entity Framework Core:** Automatisches Schema-Management und Initialisierung beim Programmstart.
-- **Sitzungsübergreifend:** Komponenten und konfigurierte PCs bleiben nach Schließen der Anwendung vollständig erhalten.
+- **Sitzungsübergreifend:** Komponenten, konfigurierte PCs und Kunden bleiben nach Schließen der Anwendung vollständig erhalten.
 
 ---
 
@@ -48,13 +53,15 @@ produktiv/
 │   │   ├── Ram.cs                      <-- Arbeitsspeicher-Modell
 │   │   ├── SSD.cs                      <-- Massenspeicher-Modell
 │   │   ├── PC.cs                       <-- Zusammengestelltes System
-│   │   └── Enums.cs                    <-- Typisierungen (Sockel, Formfaktor, RAM)
+│   │   ├── Kunde.cs                    <-- Kundenstammdaten & Bonitätsranking
+│   │   └── Enums.cs                    <-- Typisierungen (Sockel, Formfaktor, RAM, Ranking)
 │   ├── Data/                           <-- Datenpersistenz (EF Core / SQLite)
 │   │   ├── AppDbContext.cs             <-- Datenbankkontext
-│   │   └── pc_management.db            <-- Lokale SQLite-Datenbankdatei
+│   │   └── DatabaseService.cs          <-- Initialisierung, Seeding & CRUD-Service
 │   ├── Images/                         <-- Bildressourcen & Icons
 │   ├── AllListsView.xaml/.cs           <-- Tabellarische Gesamtübersicht
 │   ├── PcBuilderView.xaml/.cs          <-- Konfigurator mit Kompatibilitätsprüfung
+│   ├── KundenView.xaml/.cs             <-- Kundenpflege & Bonitätsranking (CRUD)
 │   ├── MainView.xaml/.cs               <-- Start- & Hauptansicht
 │   ├── CpuView.xaml/.cs                <-- Erfassungsmaske CPU
 │   ├── MainboardView.xaml/.cs          <-- Erfassungsmaske Mainboard
@@ -103,6 +110,7 @@ dotnet run
 | [`feature/US-02-pc-konfiguration`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-02-pc-konfiguration) | ✅ Gemergt ([PR #9](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/9)) | PC-Konfigurator mit Kompatibilitätsprüfung & Margenberechnung. |
 | [`feature/US-03-ip-adress-verwaltung`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-03-ip-adress-verwaltung) | ✅ Gemergt ([PR #10](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/10)) | Automatische IP-Adress-Zuweisung für konfigurierte Systeme. |
 | [`feature/sqlite-datenbank-persistenz`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/sqlite-datenbank-persistenz) | ✅ Gemergt ([PR #11](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/pull/11)) | Vollständige SQLite-Persistenz mit EF Core & VS Solution. |
+| [`feature/US-04-kundenverwaltung`](https://github.com/bxitscoders/E2FI3BT_BPL_PC_Managment_2628/tree/feature/US-04-kundenverwaltung) | ✅ Fertig | Kundenstammdaten (CRUD), Bonitätsranking & SQLite-Persistenz. |
 
 ---
 

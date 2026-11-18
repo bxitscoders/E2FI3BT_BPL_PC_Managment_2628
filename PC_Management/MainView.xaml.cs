@@ -74,6 +74,8 @@ namespace PCVerwaltung
 
         private void OnMenuGenerateInvoice(object sender, RoutedEventArgs e) => ContentHost.Content = new InvoiceView();
 
+        private void OnMenuKunden(object sender, RoutedEventArgs e) => ContentHost.Content = new KundenView();
+
         private void OnMenuAllLists(object sender, RoutedEventArgs e) => ContentHost.Content = new AllListsView();
     }
 }

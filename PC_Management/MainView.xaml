@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCVerwaltung"
         mc:Ignorable="d"
-        Title="HardwareView" Height="450" Width="800">
+        Title="PC-Verwaltungssystem" Height="760" Width="1120">
     <DockPanel>
         <!-- Menü oben -->
         <Menu DockPanel.Dock="Top">
@@ -22,9 +22,9 @@
                 <MenuItem Header="_Zusammenstellen" Click="OnMenuPcSystemAssemble"/>
                 <MenuItem Header="_Rechnung erstellen" Click="OnMenuGenerateInvoice"/>
             </MenuItem>
-            <MenuItem Header="Kunden">
-                <MenuItem Header="_Einpflegen" Click="OnMenuPcSystemAssemble"/>
-                <MenuItem Header="_Bearbeiten" Click="OnMenuGenerateInvoice"/>
+            <MenuItem Header="_Kunden">
+                <MenuItem Header="_Einpflegen" Click="OnMenuKunden"/>
+                <MenuItem Header="_Bearbeiten &amp; Verwalten" Click="OnMenuKunden"/>
             </MenuItem>
         </Menu>
 
