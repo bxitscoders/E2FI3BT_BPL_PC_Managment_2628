@@ -16,6 +16,7 @@ namespace PCVerwaltung.Data
         public DbSet<Ram> Rams { get; set; } = null!;
         public DbSet<SSD> SSDs { get; set; } = null!;
         public DbSet<PC> PCs { get; set; } = null!;
+        public DbSet<Kunde> Kunden { get; set; } = null!;
 
         public static string DbPath { get; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pcverwaltung.db");
 
@@ -40,6 +41,12 @@ namespace PCVerwaltung.Data
             modelBuilder.Entity<Mainboard>().ToTable("Mainboards");
             modelBuilder.Entity<Ram>().ToTable("Rams");
             modelBuilder.Entity<SSD>().ToTable("SSDs");
+
+            modelBuilder.Entity<Kunde>(entity =>
+            {
+                entity.ToTable("Kunden");
+                entity.HasKey(k => k.Id);
+            });
 
             modelBuilder.Entity<PC>(entity =>
             {

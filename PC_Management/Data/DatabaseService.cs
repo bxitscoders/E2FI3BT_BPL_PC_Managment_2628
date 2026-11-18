@@ -20,6 +20,18 @@ namespace PCVerwaltung.Data
             using var db = new AppDbContext();
             db.Database.EnsureCreated();
 
+            // Sicherstellen, dass die Tabelle 'Kunden' auch bei bereits bestehenden Datenbanken existiert
+            db.Database.ExecuteSqlRaw(@"
+                CREATE TABLE IF NOT EXISTS ""Kunden"" (
+                    ""Id"" TEXT NOT NULL CONSTRAINT ""PK_Kunden"" PRIMARY KEY,
+                    ""Vorname"" TEXT NOT NULL,
+                    ""Nachname"" TEXT NOT NULL,
+                    ""Adresse"" TEXT NOT NULL,
+                    ""Email"" TEXT NOT NULL,
+                    ""Telefon"" TEXT NOT NULL,
+                    ""Ranking"" INTEGER NOT NULL
+                );");
+
             if (!db.Cases.Any())
             {
                 var defaultCases = new List<Case>
@@ -83,6 +95,21 @@ namespace PCVerwaltung.Data
                 };
 
                 db.PCs.AddRange(defaultPcs);
+                db.SaveChanges();
+            }
+
+            if (!db.Kunden.Any())
+            {
+                var defaultKunden = new List<Kunde>
+                {
+                    new Kunde("Maximilian", "Berger",   "Königstraße 24, 70173 Stuttgart",      "m.berger@techcorp.de",     "+49 711 482910",   KundenRanking.PRIME),
+                    new Kunde("Sabine",     "Hoffmann", "Neckarstraße 112, 70190 Stuttgart",    "sabine.hoffmann@web.de",   "+49 711 903421",   KundenRanking.STANDARD),
+                    new Kunde("Lukas",      "Schäfer",  "Hauptstraße 8, 71063 Sindelfingen",    "l.schaefer@studio-gfx.de", "+49 7031 651200",  KundenRanking.PRIME),
+                    new Kunde("Julia",      "Krämer",   "Bahnhofstraße 45, 73728 Esslingen",    "julia.kraemer@gmx.de",     "+49 711 319844",   KundenRanking.STANDARD),
+                    new Kunde("Kevin",      "Winter",   "Gartenweg 3, 71638 Ludwigsburg",       "k.winter99@mail.de",       "+49 7141 228719",  KundenRanking.LOW),
+                };
+
+                db.Kunden.AddRange(defaultKunden);
                 db.SaveChanges();
             }
         }
@@ -175,6 +202,37 @@ namespace PCVerwaltung.Data
 
             db.PCs.Add(pc);
             db.SaveChanges();
+        }
+
+        public static List<Kunde> LoadKunden()
+        {
+            using var db = new AppDbContext();
+            return db.Kunden.OrderBy(k => k.Nachname).ThenBy(k => k.Vorname).ToList();
+        }
+
+        public static void SaveKunde(Kunde kunde)
+        {
+            using var db = new AppDbContext();
+            db.Kunden.Add(kunde);
+            db.SaveChanges();
+        }
+
+        public static void UpdateKunde(Kunde kunde)
+        {
+            using var db = new AppDbContext();
+            db.Kunden.Update(kunde);
+            db.SaveChanges();
+        }
+
+        public static void DeleteKunde(Kunde kunde)
+        {
+            using var db = new AppDbContext();
+            var existing = db.Kunden.FirstOrDefault(k => k.Id == kunde.Id);
+            if (existing != null)
+            {
+                db.Kunden.Remove(existing);
+                db.SaveChanges();
+            }
         }
     }
 }
